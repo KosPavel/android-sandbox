@@ -7,14 +7,12 @@ import com.kospavel.sandbox.network.ServerApi
 import com.kospavel.sandbox.ui.main.model.MainScreenEvent
 import com.kospavel.sandbox.ui.main.model.MainScreenState
 import com.kospavel.sandbox.ui.main.model.MainScreenWish
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 
 class MainViewModel(private val api: ServerApi) : ViewModel() {
 
@@ -34,7 +32,7 @@ class MainViewModel(private val api: ServerApi) : ViewModel() {
 
     private fun reduce(wish: MainScreenWish.BtnClick) {
         runTimer()
-        viewModelScope.launch {
+        CoroutineScope(Dispatchers.IO).launch {
             Log.i("qwerty", "request sent")
             val response = runCatching { api.testRequest() }
             Log.i("qwerty", "response == $response")
